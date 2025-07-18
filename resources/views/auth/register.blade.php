@@ -1,52 +1,176 @@
-<x-guest-layout>
-    <form method="POST" action="{{ route('register') }}">
-        @csrf
+<!DOCTYPE html>
+<html lang="en">
 
-        <!-- Name -->
-        <div>
-            <x-input-label for="name" :value="__('Name')" />
-            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
-            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register | JobRich</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" href="{{asset('assets/logo/logo-job-rich.png')}}" type="image/x-icon">
+    <style>
+        @keyframes slideInLeft {
+            from {
+                transform: translateX(-100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutLeft {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-100%);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+        .slide-in-left {
+            animation: slideInLeft 0.5s forwards;
+        }
+
+        .slide-out-left {
+            animation: slideOutLeft 0.5s forwards;
+        }
+
+        .slide-in-right {
+            animation: slideInRight 0.5s forwards;
+        }
+
+        .slide-out-right {
+            animation: slideOutRight 0.5s forwards;
+        }
+
+        .bg-overlay {
+            background: rgba(0, 0, 0, 0.6);
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column flex-lg-row h-100 bg-light overflow-hidden">
+
+    <div id="backgroundContainer"
+        class="col-lg-6 d-flex align-items-center justify-content-center text-white slide-in-left position-relative">
+        <img src="{{asset('assets/logo/logo-job-rich.png')}}" alt="Background"
+            class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover">
+    </div>
+
+    <div id="formContainer"
+        class="col-lg-6 d-flex align-items-center justify-content-center vh-100 bg-white slide-in-right position-relative">
+        <div class="w-100" style="max-width: 400px;">
+            <div class="position-absolute top-0 end-0 mt-3 me-3">
+                <a href="" class="btn btn-primary rounded-pill">Home</a>
+            </div>
+
+            <div>
+                <h2 class="text-center fs-3 fw-semibold text-secondary">Register</h2>
+                <p class="text-center text-muted">Buat akun anda di JobRich</p>
+                <form method="POST" action="{{ route('register') }}" class="mt-4">
+                    @csrf
+                    <div class="mb-3">
+                        <label for="name" class="form-label text-secondary">Full Name</label>
+                        <input type="text" id="name" name="name" class="form-control @error('name') is-invalid @enderror"
+                            placeholder="JobRich" value="{{ old('name') }}" autofocus>
+                        @error('name')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-secondary">Email</label>
+                        <input type="email" id="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                            placeholder="email@example.com" value="{{ old('email') }}">
+                        @error('email')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-secondary">Password</label>
+                        <input type="password" id="password" name="password" class="form-control @error('password') is-invalid @enderror"
+                            placeholder="********">
+                        @error('password')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password_confirmation" class="form-label text-secondary">Confirm Password</label>
+                        <input type="password" id="password_confirmation" name="password_confirmation" class="form-control @error('password_confirmation') is-invalid @enderror"
+                            placeholder="********">
+                        @error('password_confirmation')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-secondary d-block">Daftar Sebagai</label>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input @error('role') is-invalid @enderror" type="radio" name="role" id="role_pelamar" value="applicant" {{ old('role') == 'applicant' ? 'checked' : '' }}>
+                            <label class="form-check-label text-secondary" for="role_pelamar">
+                                Pelamar
+                            </label>
+                        </div>
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input @error('role') is-invalid @enderror" type="radio" name="role" id="role_perusahaan" value="company" {{ old('role') == 'company' ? 'checked' : '' }}>
+                            <label class="form-check-label text-secondary" for="role_perusahaan">
+                                Perusahaan
+                            </label>
+                        </div>
+
+                        @error('role')
+                        <div class="invalid-feedback d-block">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
+
+                    <button class="btn btn-primary w-100 fw-semibold">Register</button>
+                </form>
+
+                <p class="text-center mt-4 text-muted">
+                    Sudah punya akun ?
+                    <a href="{{route('login')}}" class="btn btn-link text-primary text-decoration-none">Back to
+                        Login</a>
+                </p>
+            </div>
         </div>
+    </div>
 
-        <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
-
-        <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" :value="__('Confirm Password')" />
-
-            <x-text-input id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
-            <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('login') }}">
-                {{ __('Already registered?') }}
-            </a>
-
-            <x-primary-button class="ms-4">
-                {{ __('Register') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+</html>

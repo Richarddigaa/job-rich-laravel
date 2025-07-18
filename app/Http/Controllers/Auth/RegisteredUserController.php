@@ -31,8 +31,19 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'min:8', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'in:applicant,company'],
+        ], [
+            'name.required' => 'Nama tidak boleh kosong.',
+            'email.required' => 'Email tidak boleh kosong.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar.',
+            'password.required' => 'Password tidak boleh kosong.',
+            'password.min' => 'Password minimal 8 huruf.',
+            'password.confirmed' => 'Konfirmasi password tidak cocok.',
+            'role.required' => 'Silakan pilih peran Anda.',
+            'role.in' => 'Pilihan peran tidak valid.',
         ]);
 
         $user = User::create([
@@ -41,10 +52,19 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        $user->assignRole($request->role);
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        if ($user->hasRole('applicant')) {
+            return redirect()->route('applicant.dashboard');
+        } elseif ($user->hasRole('company')) {
+            return redirect()->route('company.dashboard');
+        } else {
+            // untuk role yang tidak terdaftar
+            return redirect()->route('login')->with('error', 'Role pengguna tidak dikenali.');
+        }
     }
 }

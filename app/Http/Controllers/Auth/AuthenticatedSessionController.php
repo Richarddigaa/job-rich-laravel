@@ -28,7 +28,18 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $user = Auth::user();
+
+        if ($user->hasRole('applicant')) { // role pelamar
+            return redirect()->route('applicant.dashboard');
+        } elseif ($user->hasRole('company')) { // role perusahaan
+            return redirect()->route('company.dashboard');
+        } elseif ($user->hasRole('admin')) { // role admin
+            return redirect()->route('admin.dashboard');
+        } else {
+            // untuk role yang tidak terdaftar
+            return redirect()->route('login')->with('error', 'Role pengguna tidak dikenali.');
+        }
     }
 
     /**

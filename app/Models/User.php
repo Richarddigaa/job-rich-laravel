@@ -46,4 +46,16 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // relasi user ke personal company (one to many)
+    public function personalCompany()
+    {
+        return $this->hasOne(PersonalCompany::class);
+    }
+
+    // relasi user ke personal applicant (one to many)
+    public function personalApplicant()
+    {
+        return $this->hasOne(PersonalApplicant::class);
+    }
 }
