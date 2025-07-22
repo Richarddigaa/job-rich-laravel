@@ -88,6 +88,8 @@ class PersonalCompanyController extends Controller
         DB::transaction(function () use ($request, $personalCompany) {
             $validated = $request->validated();
 
+            $validated['slug_company'] = Str::slug($validated['name_company'] . '-' . $personalCompany->id);
+
             // cek apakah user input avatar jika input maka proses upload
             if ($request->hasFile('avatars_company')) {
                 $avatarsCompany = $request->file('avatars_company')->store('avatars_company', 'public');

@@ -29,7 +29,7 @@
                                 @if ($personalCompany->avatars_company)
                                 <img src="{{ Storage::url($personalCompany->avatars_company) }}" alt="{{ $personalCompany->name_company }}" class="img-thumbnail mt-2" width="150">
                                 @else
-                                <img src="{{ asset('assets/icon/icon-user.png') }}" class="img-thumbnail mt-2" width="150" alt="{{ $personalCompany->user->name }}">
+                                <img src="{{ asset('assets/icon/icon-user.png') }}" class="img-thumbnail mt-2" width="150" alt="{{ $personalCompany->name_company }}">
                                 @endif
                             </div>
 

@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardApplicantController;
 use App\Http\Controllers\DashboardCompanyController;
 use App\Http\Controllers\JobVacancyController;
+use App\Http\Controllers\PersonalApplicantController;
 use App\Http\Controllers\PersonalCompanyController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Contracts\Queue\Job;
@@ -86,6 +87,19 @@ Route::middleware(['auth', 'role:company'])->group(function () {
 Route::middleware(['auth', 'role:applicant'])->group(function () {
     Route::prefix('applicant')->name('applicant.')->group(function () {
         Route::get('/dashboard-applicant', [DashboardApplicantController::class, 'index'])->name('dashboard');
+
+        // edit profile
+        Route::get('/dashboard-applicant/profile/create', [PersonalApplicantController::class, 'create'])->name('profile.create');
+        Route::post('/dashboard-applicant/profile/store', [PersonalapplicantController::class, 'store'])->name('profile.store');
+
+        Route::get(
+            '/dashboard-applicant/profile/{personalApplicant:slug_applicant}/edit',
+            [PersonalapplicantController::class, 'edit']
+        )->name('profile.edit');
+        Route::put(
+            '/dashboard-applicant/profile/{personalApplicant:slug_applicant}/update',
+            [PersonalapplicantController::class, 'update']
+        )->name('profile.update');
     });
 });
 
