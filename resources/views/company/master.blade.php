@@ -31,6 +31,10 @@
 
 <body id="page-top">
 
+    @php
+    $company = Auth::user()->personalCompany;
+    @endphp
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -40,20 +44,17 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('company.dashboard')}}">
                 <div class="sidebar-brand-icon">
-                    <img src="{{asset('assets/logo/logo-job-rich.png')}}" class="img-fluid">
+                    <i class="fas fa-briefcase"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">JobRich</div>
             </a>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider my-0">
 
             <!-- Divider -->
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Admin
+                Kelola Perusahaan
             </div>
 
             @role('company')
@@ -66,20 +67,30 @@
                 </a>
             </li>
 
+            @if ($company && $company->status_personal_company == 'active')
+
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('company.jobs.index', $company->slug_company)}}">
+                    <i class="fas fa-fw fa-briefcase"></i>
+                    <span>Lowongan Pekerjaan</span>
+                </a>
+            </li>
+
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Companies
+                Kelola Pelamar
             </div>
 
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('company.dashboard')}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Kandidat Pelamar</span>
+                </a>
+            </li>
 
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                Manage Applicant
-            </div>
+            @endif
 
             @endrole
 
@@ -115,15 +126,32 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{Auth::user()->name}}</span>
-                                <img class="img-profile rounded-circle" src="{{asset('assets/icon/icon-user.png')}}" />
+
+                                @if($company && $company->name_company && $company->avatars_company)
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $company->name_company }}</span>
+                                <img class="img-profile rounded-circle" src="{{ Storage::url($company->avatars_company) }}" />
+                                @elseif($company && $company->name_company && !$company->avatars_company)
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $company->name_company }}</span>
+                                <img class="img-profile rounded-circle" src="{{ asset('assets/icon/icon-user.png') }}" />
+                                @else
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <img class="img-profile rounded-circle" src="{{ asset('assets/icon/icon-user.png') }}" />
+                                @endif
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="">
+                                @if ($company && $company->slug_company)
+                                <a class="dropdown-item" href="{{route('company.profile.edit', $company->slug_company)}}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profil Saya
+                                    Profil Akun
                                 </a>
+                                @else
+                                <a class="dropdown-item" href="{{route('company.profile.create')}}">
+                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Profil Akun
+                                </a>
+                                @endif
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="{{ route('logout') }}" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>

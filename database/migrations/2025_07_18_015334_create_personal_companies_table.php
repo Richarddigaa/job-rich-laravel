@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('personal_companies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('avatars_company');
+            $table->string('avatars_company')->nullable();
             $table->string('name_company');
+            $table->string('slug_company');
             $table->string('email_company');
             $table->string('phone_company');
             $table->string('city_company');

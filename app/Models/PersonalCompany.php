@@ -10,6 +10,7 @@ class PersonalCompany extends Model
         'user_id',
         'avatars_company',
         'name_company',
+        'slug_company',
         'email_company',
         'phone_company',
         'city_company',

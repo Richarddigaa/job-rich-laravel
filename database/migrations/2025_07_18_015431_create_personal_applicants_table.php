@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('personal_applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('avatars_applicant');
+            $table->string('avatars_applicant')->nullable();
             $table->string('name_applicant');
+            $table->string('slug_applicant');
             $table->string('email_applicant');
             $table->string('phone_applicant');
             $table->string('city_applicant');

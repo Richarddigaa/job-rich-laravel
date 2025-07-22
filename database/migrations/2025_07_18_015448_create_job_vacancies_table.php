@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('personal_company_id')->constrained('personal_companies')->onDelete('cascade');
             $table->string('job_position');
+            $table->string('slug_job_position');
             $table->text('job_description');
             $table->string('job_city');
             $table->text('job_address');

@@ -10,6 +10,7 @@ class PersonalApplicant extends Model
         'user_id',
         'avatars_applicant',
         'name_applicant',
+        'slug_applicant',
         'email_applicant',
         'phone_applicant',
         'city_applicant',
