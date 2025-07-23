@@ -58,4 +58,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(PersonalApplicant::class);
     }
+
+    // menampilkan semua user yang memiliki role perusahaan
+    public static function getAllUserRoleCompany()
+    {
+        return User::role('company')
+            ->with('personalCompany')
+            ->orderByDesc('id')
+            ->get();
+    }
 }

@@ -22,6 +22,36 @@
 
     @stack('style')
 
+
+    <style>
+        .success {
+            background-color: #198754;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .danger {
+            background-color: #F90101;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .warning {
+            background-color: #e4d96f;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+        }
+    </style>
+
     <!-- Custom styles for this template-->
     <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
 
@@ -40,7 +70,7 @@
             <!-- Sidebar - Brand -->
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{route('admin.dashboard')}}">
                 <div class="sidebar-brand-icon">
-                    <img src="{{asset('assets/logo/logo-job-rich.png')}}" class="img-fluid">
+                    <i class="fas fa-briefcase"></i>
                 </div>
                 <div class="sidebar-brand-text mx-3">JobRich</div>
             </a>
@@ -53,7 +83,7 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Admin
+                Kelola Admin
             </div>
 
             @role('admin')
@@ -70,16 +100,44 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Companies
+                Kelola Perusahaan
             </div>
+
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('admin.companies.index')}}">
+                    <i class="far fa-fw fa-building"></i>
+                    <span>Daftar Perusahaan</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('admin.dashboard')}}">
+                    <i class="fas fa-fw fa-briefcase"></i>
+                    <span>Daftar Lowongan</span>
+                </a>
+            </li>
 
 
             <hr class="sidebar-divider">
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Manage Applicant
+                Kelola Pelamar
             </div>
+
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('admin.dashboard')}}">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Daftar Pelamar</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link pb-0" href="{{route('admin.dashboard')}}">
+                    <i class="fas fa-fw fa-user-tie"></i>
+                    <span>Daftar Lamaran</span>
+                </a>
+            </li>
 
             @endrole
 
