@@ -39,10 +39,8 @@ class JobVacancy extends Model
     }
 
     // ambil semua data job vacancy berdasarkan id personal company
-    public static function getAllJobVacancy()
+    public static function getAllJobsByCompany($companyId)
     {
-        $user = Auth::user();
-
-        return JobVacancy::where('personal_company_id', $user->personalCompany->id)->orderByDesc('id')->get();
+        return JobVacancy::where('personal_company_id', $companyId)->orderByDesc('id')->get();
     }
 }

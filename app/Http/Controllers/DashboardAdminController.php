@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateProfileCompanyRequest;
+use App\Models\JobVacancy;
 use App\Models\PersonalCompany;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -127,7 +128,9 @@ class DashboardAdminController extends Controller
 
     public function companyProfileShow(PersonalCompany $personalCompany)
     {
-        return view('admin.companies.profile.show', compact('personalCompany'));
+        $jobVacancies = JobVacancy::getAllJobsByCompany($personalCompany->id);
+
+        return view('admin.companies.profile.show', compact('personalCompany', 'jobVacancies'));
     }
 
     public function companyProfileEdit(PersonalCompany $personalCompany)
@@ -167,9 +170,17 @@ class DashboardAdminController extends Controller
             'status_personal_company' => 'required|in:active,inactive,pending',
         ]);
 
+        // Update status perusahaan
         $personalCompany->update([
             'status_personal_company' => $request->status_personal_company,
         ]);
+
+        // Jika status perusahaan menjadi 'inactive', ubah semua lowongan 'open' menjadi 'closed'
+        if ($request->status_personal_company === 'inactive') {
+            $personalCompany->jobVacancies()
+                ->where('job_status', 'open')
+                ->update(['job_status' => 'closed']);
+        }
 
         return redirect()->route('admin.companies.profile.show', $personalCompany->slug_company)->with('alert', [
             'title' => 'Status Perusahaan Berhasil di Ubah',

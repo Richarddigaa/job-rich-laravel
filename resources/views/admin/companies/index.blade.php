@@ -51,7 +51,7 @@
                                         @elseif ($status == 'pending')
                                         <span class="warning">Pending</span>
                                         @else
-                                        <span class="text-muted">Belum mengisi profile</span>
+                                        <span class="text-muted">Belum Isi Profil</span>
                                         @endif
                                     </td>
                                     <td>{{\Carbon\Carbon::parse($company->created_at)->format('d F Y')}}</td>

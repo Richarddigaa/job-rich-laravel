@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminJobVacancyController;
 use App\Http\Controllers\DashboardAdminController;
 use App\Http\Controllers\DashboardApplicantController;
 use App\Http\Controllers\DashboardCompanyController;
@@ -62,6 +63,32 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             '/companies/{user}/destroy',
             [DashboardAdminController::class, 'companyDestroy']
         )->name('companies.destroy');
+
+        // route kelola lowongan
+        Route::get(
+            '/companies/profile/{personalCompany:slug_company}/jobs/create',
+            [AdminJobVacancyController::class, 'create']
+        )->name('companies.jobs.create');
+        Route::post(
+            '/companies/profile/{personalCompany:slug_company}/jobs/store',
+            [AdminJobVacancyController::class, 'store']
+        )->name('companies.jobs.store');
+        Route::get(
+            '/companies/profile/{personalCompany:slug_company}/jobs/{jobVacancy:slug_job_position}/show',
+            [AdminJobVacancyController::class, 'show']
+        )->name('companies.jobs.show');
+        Route::get(
+            '/companies/profile/{personalCompany:slug_company}/jobs/{jobVacancy:slug_job_position}/edit',
+            [AdminJobVacancyController::class, 'edit']
+        )->name('companies.jobs.edit');
+        Route::put(
+            '/companies/profile/{personalCompany:slug_company}/jobs/{jobVacancy:slug_job_position}/update',
+            [AdminJobVacancyController::class, 'update']
+        )->name('companies.jobs.update');
+        Route::delete(
+            '/companies/profile/{personalCompany:slug_company}/jobs/{jobVacancy:slug_job_position}/destroy',
+            [AdminJobVacancyController::class, 'destroy']
+        )->name('companies.jobs.destroy');
     });
 });
 

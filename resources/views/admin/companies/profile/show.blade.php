@@ -1,6 +1,10 @@
 @extends('admin.master')
 @section('title', 'Detail Perusahaan | JobRich')
 
+@push('style')
+<link rel="stylesheet" href="{{asset('vendor/datatables/dataTables.bootstrap4.min.css')}}">
+@endpush
+
 @section('content')
 <div class="container-fluid">
 
@@ -70,9 +74,6 @@
                         </div>
                     </div>
 
-
-
-
                     <div class="d-flex flex-column flex-sm-row align-items-center mb-3">
                         <a href="{{ route('admin.companies.profile.edit', $personalCompany->slug_company) }}" class="btn btn-outline-primary mb-2 mb-sm-0 mr-sm-2">
                             <i class="far fa-fw fa-edit"></i> Edit
@@ -114,7 +115,65 @@
                     <div>{!! $personalCompany->description_company !!}</div>
                 </div>
 
+                <!-- informasi lowongan pekerjaan -->
+                @if($personalCompany->status_personal_company == 'active' || $personalCompany->status_personal_company == 'inactive')
+                <div class="card">
+                    <div class="card-header py-3 text-center">
+                        <h6 class="m-0 font-weight-bold text-dark text-uppercase">LOWONGAN PEKERJAAN {{ $personalCompany->name_company }}</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="widget">
+                            <div class="table-responsive">
+                                <a href="{{route('admin.companies.jobs.create', $personalCompany->slug_company)}}" class="btn btn-primary mt-1 mb-2">
+                                    <i class="fas fa-fw fa-plus"></i>
+                                    Tambah Lowongan
+                                </a>
+
+                                <table id="dataTable" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Posisi Pekerjaan</th>
+                                            <th>Kota Pekerjaan</th>
+                                            <th>Kisaran Gaji</th>
+                                            <th>Batas Lowongan</th>
+                                            <th>Status Pekerjaan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($jobVacancies as $index => $jobs)
+                                        <tr>
+                                            <td>{{$index + 1}}.</td>
+                                            <td>{{$jobs->job_position}}</td>
+                                            <td>{{$jobs->job_city}}</td>
+                                            <td>Rp {{number_format($jobs->job_salary_first, 0, ',', '.')}} - Rp {{number_format($jobs->job_salary_last, 0, ',', '.')}}</td>
+                                            <td>{{\Carbon\Carbon::parse($jobs->job_deadline)->format('d F Y')}}</td>
+                                            <td>
+                                                @if ($jobs->job_status == 'open')
+                                                <span class="success">Buka</span>
+                                                @else
+                                                <span class="danger">Tutup</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                <a href="{{route('admin.companies.jobs.show', [$personalCompany->slug_company, $jobs->slug_job_position])}}" class="btn btn-outline-primary">
+                                                    <i class="fas fa-fw fa-search-plus"></i>
+                                                    Lihat Detail
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @endif
+
             </div>
+
         </div>
     </div>
 </div>
@@ -136,5 +195,14 @@
             }
         });
     }
+</script>
+
+<script src="{{asset('vendor/datatables/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('vendor/datatables/dataTables.bootstrap4.min.js')}}"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#dataTable').DataTable();
+    });
 </script>
 @endpush

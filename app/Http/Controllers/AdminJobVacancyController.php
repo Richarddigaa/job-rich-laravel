@@ -6,28 +6,17 @@ use App\Http\Requests\StoreUpdateJobVacancyRequest;
 use App\Models\JobVacancy;
 use App\Models\PersonalCompany;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
-class JobVacancyController extends Controller
+class AdminJobVacancyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(PersonalCompany $personalCompany)
-    {
-        $jobVacancies = JobVacancy::getAllJobsByCompany($personalCompany->id);
-
-        return view('company.jobs.index', compact('jobVacancies', 'personalCompany'));
-    }
-
     /**
      * Show the form for creating a new resource.
      */
     public function create(PersonalCompany $personalCompany)
     {
-        return view('company.jobs.create', compact('personalCompany'));
+        return view('admin.companies.jobs.create', compact('personalCompany'));
     }
 
     /**
@@ -35,7 +24,7 @@ class JobVacancyController extends Controller
      */
     public function store(StoreUpdateJobVacancyRequest $request, PersonalCompany $personalCompany)
     {
-        DB::transaction(function () use ($request, $personalCompany) {
+        $jobVacancy = DB::transaction(function () use ($request, $personalCompany) {
             $validated = $request->validated();
 
             // mengambil id personal company yang login
@@ -43,10 +32,10 @@ class JobVacancyController extends Controller
 
             $validated['slug_job_position'] = Str::slug($validated['job_position'] . '-' . $personalCompany->name_company);
 
-            $newJobVacancy = JobVacancy::create($validated);
+            return JobVacancy::create($validated);
         });
 
-        return redirect()->route('company.jobs.index', $personalCompany->slug_company)->with('alert', [
+        return redirect()->route('admin.companies.jobs.show', [$personalCompany->slug_company, $jobVacancy->slug_job_position])->with('alert', [
             'title' => 'Data Lowongan Berhasil Di Tambahkan',
             'type' => 'success', // 'success', 'error', 'warning', 'info'
         ]);
@@ -57,7 +46,7 @@ class JobVacancyController extends Controller
      */
     public function show(PersonalCompany $personalCompany, JobVacancy $jobVacancy)
     {
-        return view('company.jobs.show', compact('jobVacancy', 'personalCompany'));
+        return view('admin.companies.jobs.show', compact('jobVacancy', 'personalCompany'));
     }
 
     /**
@@ -65,7 +54,7 @@ class JobVacancyController extends Controller
      */
     public function edit(PersonalCompany $personalCompany, JobVacancy $jobVacancy)
     {
-        return view('company.jobs.edit', compact('jobVacancy', 'personalCompany'));
+        return view('admin.companies.jobs.edit', compact('jobVacancy', 'personalCompany'));
     }
 
     /**
@@ -82,7 +71,7 @@ class JobVacancyController extends Controller
             $jobVacancy->update($validated);
         });
 
-        return redirect()->route('company.jobs.show', [$personalCompany->slug_company, $jobVacancy->slug_job_position])->with('alert', [
+        return redirect()->route('admin.companies.jobs.show', [$personalCompany->slug_company, $jobVacancy->slug_job_position])->with('alert', [
             'title' => 'Data Lowongan Berhasil Di Ubah',
             'type' => 'success', // 'success', 'error', 'warning', 'info'
         ]);
@@ -97,7 +86,7 @@ class JobVacancyController extends Controller
             $jobVacancy->delete();
         });
 
-        return redirect()->route('company.jobs.index', $personalCompany->slug_company)->with('alert', [
+        return redirect()->route('admin.companies.profile.show', $personalCompany->slug_company)->with('alert', [
             'title' => 'Data Lowongan ' . $jobVacancy->job_position . ' Berhasil Dihapus',
             'type' => 'success', // 'success', 'error', 'warning', 'info'
         ]);
