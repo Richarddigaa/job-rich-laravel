@@ -11,6 +11,13 @@ use Illuminate\Support\Str;
 
 class AdminJobVacancyController extends Controller
 {
+    public function index(PersonalCompany $personalCompany)
+    {
+        $jobVacancies = JobVacancy::getAllJobs();
+
+        return view('admin.companies.jobs.index', compact('jobVacancies'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */

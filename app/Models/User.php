@@ -67,4 +67,13 @@ class User extends Authenticatable
             ->orderByDesc('id')
             ->get();
     }
+
+    // menampilkan semua user yang memiliki role pelamar
+    public static function getAllUserRoleApplicant()
+    {
+        return User::role('applicant')
+            ->with('personalApplicant')
+            ->orderByDesc('id')
+            ->get();
+    }
 }

@@ -38,6 +38,12 @@ class JobVacancy extends Model
         return $this->belongsToMany(PersonalApplicant::class, 'bookmarks')->withTimestamps();
     }
 
+    // ambil semua data job vacancy
+    public static function getAllJobs()
+    {
+        return JobVacancy::with('personalCompany')->orderByDesc('id')->get();
+    }
+
     // ambil semua data job vacancy berdasarkan id personal company
     public static function getAllJobsByCompany($companyId)
     {

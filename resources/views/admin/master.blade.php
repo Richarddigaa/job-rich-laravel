@@ -111,7 +111,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link pb-0" href="{{route('admin.dashboard')}}">
+                <a class="nav-link pb-0" href="{{route('admin.jobs.index')}}">
                     <i class="fas fa-fw fa-briefcase"></i>
                     <span>Daftar Lowongan</span>
                 </a>
@@ -126,7 +126,7 @@
             </div>
 
             <li class="nav-item">
-                <a class="nav-link pb-0" href="{{route('admin.dashboard')}}">
+                <a class="nav-link pb-0" href="{{route('admin.applicants.index')}}">
                     <i class="fas fa-fw fa-users"></i>
                     <span>Daftar Pelamar</span>
                 </a>

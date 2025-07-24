@@ -31,7 +31,6 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // route kelola perusahaan
         Route::get('/companies', [DashboardAdminController::class, 'companyIndex'])->name('companies.index');
-        Route::get('/companies/create', [DashboardAdminController::class, 'companyCreate'])->name('companies.create');
         Route::post('/companies/store', [DashboardAdminController::class, 'companyStore'])->name('companies.store');
 
         Route::get('/companies/profile/{user}/create', [DashboardAdminController::class, 'companyProfileCreate'])
@@ -66,6 +65,11 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 
         // route kelola lowongan
         Route::get(
+            '/companies/jobs',
+            [AdminJobVacancyController::class, 'index']
+        )->name('jobs.index');
+
+        Route::get(
             '/companies/profile/{personalCompany:slug_company}/jobs/create',
             [AdminJobVacancyController::class, 'create']
         )->name('companies.jobs.create');
@@ -89,6 +93,41 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
             '/companies/profile/{personalCompany:slug_company}/jobs/{jobVacancy:slug_job_position}/destroy',
             [AdminJobVacancyController::class, 'destroy']
         )->name('companies.jobs.destroy');
+
+
+        // kelola pelamar
+        Route::get('/applicants', [DashboardAdminController::class, 'applicantIndex'])->name('applicants.index');
+        Route::post('/applicants/store', [DashboardAdminController::class, 'applicantStore'])->name('applicants.store');
+
+        Route::get('/applicants/profile/{user}/create', [DashboardAdminController::class, 'applicantProfileCreate'])
+            ->name('applicants.profile.create');
+        Route::post('/applicants/profile/{user}/store', [DashboardAdminController::class, 'applicantProfileStore'])
+            ->name('applicants.profile.store');
+
+        Route::get(
+            '/applicants/profile/{personalApplicant:slug_applicant}/show',
+            [DashboardAdminController::class, 'applicantProfileShow']
+        )->name('applicants.profile.show');
+
+        // update pelamar
+        Route::get(
+            '/applicants/profile/{personalApplicant:slug_applicant}/edit',
+            [DashboardAdminController::class, 'applicantProfileEdit']
+        )->name('applicants.profile.edit');
+        Route::put(
+            '/applicants/profile/{personalApplicant:slug_applicant}/update',
+            [DashboardAdminController::class, 'applicantProfileUpdate']
+        )->name('applicants.profile.update');
+        Route::patch(
+            '/applicants/profile/{personalApplicant:slug_applicant}/update-status-applicant',
+            [DashboardAdminController::class, 'applicantProfileUpdateStatus']
+        )->name('applicants.profile.update.status');
+
+        // hapus pelamar
+        Route::delete(
+            '/applicants/{user}/destroy',
+            [DashboardAdminController::class, 'applicantDestroy']
+        )->name('applicants.destroy');
     });
 });
 
